@@ -1,38 +1,19 @@
-const util = require('util');
-const fs = require('fs/promises');
-const exec = util.promisify(require('child_process').exec);
-const axios = require('axios');
+// Imports the Google Cloud client library
+const vision = require('@google-cloud/vision');
 
-(async () => {
-    // capture frame
-    // await exec(
-    //     'ffmpeg -y -f video4linux2 -s 1280x720 ' +
-    //     '-i /dev/video1 -frames 1 code.jpg'
-    // );
+// Creates a client
+const client = new vision.ImageAnnotatorClient();
 
-    // convert to base 64
-    const image = await fs.readFile('code.jpg');
-    const base64 = image.toString('base64');
+/**
+ * TODO(developer): Uncomment the following line before running the sample.
+ */
+// const fileName = 'Local image file, e.g. /path/to/image.png';
 
-    const url =
-        `https://vision.googleapis.com/v1/images:annotate` +
-        `?key=${process.env.gkey}`;
+// Read a local image as a text document
+async function start() {
+const [result] = await client.documentTextDetection("sample.png");
+const fullTextAnnotation = result.fullTextAnnotation;
+console.log(`Full text: ${fullTextAnnotation.text}`);
+}
 
-    // send to vision api
-    const results = await axios
-        .post(url, {
-            requests: [{
-                image: {
-                    content: base64
-                },
-                features: [{
-                    type: 'DOCUMENT_TEXT_DETECTION'
-                }]
-            }]
-        });
-
-    const code = results.data.responses[0].fullTextAnnotation.text;
-
-    console.log(code);
-    //eval(code);
-})();
+start()
