@@ -1,42 +1,44 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const path = require('path');
-const formidable = require('formidable');
- 
-app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
-  //__dirname : Resolve to your project folder.
+const formidable = require("formidable");
+const path = require("path");
+const uploadFolder = path.join(__dirname, "public");
+
+app.use(express.static(__dirname + "/public"));
+
+app.listen(4000, () => {
+  console.log("Server listening on Port 4000 ...");
 });
 
-app.post('/api/upload', (req, res, next) => {
-    const form = formidable({ });
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        next(err);
-        return;
-      }
-      console.log(files.upload.filepath); 
-      run_gc_vision(files.upload.filepath);
-    });
-
-    
+app.post("/api/upload", (req, res, next) => {
+  const form = formidable({
+    uploadDir: uploadFolder,
+    keepExtensions: true,
+    filename: function (name, ext, part, form) {
+      return "test.png";
+    },
   });
 
-app.listen(3000, () => {
-  console.log('Server listening on http://localhost:3000 ...');
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    console.log(files.upload.filepath);
+    run_gc_vision(files.upload.filepath);
+  });
 });
 
-// Imports the Google Cloud client library
-const vision = require('@google-cloud/vision');
+const vision = require("@google-cloud/vision");
 
-// Creates a client
 const client = new vision.ImageAnnotatorClient();
 
-// const fileName = 'Local image file, e.g. /path/to/image.png';
-
-// Read a local image as a text document
 async function run_gc_vision(filename) {
-const [result] = await client.documentTextDetection(filename);
-const fullTextAnnotation = result.fullTextAnnotation;
-console.log(`Full text: ${fullTextAnnotation.text}`);
+  const [result] = await client.documentTextDetection(filename);
+  const fullTextAnnotation = result.fullTextAnnotation;
+  app.get("/data", (req, res) => {
+    res.send({
+      parsedData: fullTextAnnotation.text
+    });
+  });
 }

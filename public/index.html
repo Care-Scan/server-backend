@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care Scan</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<!-- <header style="height: 75px; background-color: aqua; text-align: center; color: #000; align-items: center;">Scan Care</header> -->
+
+<body>
+    <h1>Care Scan</h1>
+    <div class="container">
+        <div class="card">
+            <h2>Please upload your patient intake form</h2>
+            <div class="dropbox">
+                <form action="/api/upload" enctype="multipart/form-data" method="post">
+                    <input type="file" name="upload" id="upload" class="selectfile pt-16" required />
+                    <input type="submit" value="Upload" />
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div>Made with ❤ by Sparsh, Yiaming, Adit, and Jae for uOttaHack Season 5 😎</div>
+</footer>
+
+</html>
