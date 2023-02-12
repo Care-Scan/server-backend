@@ -27,7 +27,7 @@
 .dropbox {
     margin: 10px 0;
     padding: 30px;
-    height: 18vh;
+    height: 18vh;                   
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,51 +38,20 @@
 
 form {
     display: flex;
+    gap: 3em;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.custom-file-input {
-    color: transparent;
-    margin-left: 5%;
-}
-
-.custom-file-input::-webkit-file-upload-button {
-    visibility: hidden;
-}
-
-.custom-file-input::before {
-    content: 'Select Files Here';
-    color: #e9fff6;
-    display: inline-block;
-    border-radius: 3px;
-    padding: 5px 8px;
-    outline: none;
-    white-space: nowrap;
-    -webkit-user-select: none;
-    cursor: pointer;
-    /* text-shadow: 1px 1px #fff; */
-    font-weight: 700;
-    font-size: 20pt;
-}
-
-.custom-file-input:hover::before {
-    border-color: black;
-}
-
-.custom-file-input:active {
-    outline: 0;
-}
-
-.custom-file-input:active::before {
-    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
-}
 
 body {
     padding: 20px;
 }
 
+.selectfile {
+    margin-left: 25%;
+}
 .uploadbtn {
     text-decoration: none;
     background-color: #e9fff6;
