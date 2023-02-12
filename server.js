@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
-const path = require('path');
 const formidable = require('formidable');
-
+const service = require('./services/gc_vision')
 app.use(express.static('public'))
+
+app.get("/api", (req, res) => {
+    res.send({ message: "Hello from server!" });
+  });
 
 app.post('/api/upload', (req, res, next) => {
     const form = formidable({});
@@ -13,25 +16,10 @@ app.post('/api/upload', (req, res, next) => {
             return;
         }
         console.log(files.upload.filepath);
-        run_gc_vision(files.upload.filepath);
+        service.run_gc_vision(files.upload.filepath);
     });
 });
 
-app.listen(3000, () => {
-    console.log('Server listening on http://localhost:3000 ...');
+app.listen(3001, () => {
+    console.log('Server listening on http://localhost:3001 ...');
 });
-
-// Imports the Google Cloud client library
-const vision = require('@google-cloud/vision');
-
-// Creates a client
-const client = new vision.ImageAnnotatorClient();
-
-// const filename = 'Local image file, e.g. /path/to/image.png';
-
-// Read a local image as a text document
-async function run_gc_vision(filename) {
-    const [result] = await client.documentTextDetection(filename);
-    const fullTextAnnotation = result.fullTextAnnotation;
-    console.log(`Full text: ${fullTextAnnotation.text}`);
-}
