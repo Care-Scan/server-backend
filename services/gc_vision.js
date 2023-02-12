@@ -8,9 +8,13 @@ const client = new vision.ImageAnnotatorClient();
 
 // Read a local image as a text document
 async function run_gc_vision(filename) {
+    let jsonTextAnnotation={};
     const [result] = await client.documentTextDetection(filename);
-    const fullTextAnnotation = result.fullTextAnnotation;
-    console.log(`Full text: ${fullTextAnnotation.text}`);
+    const fullTextAnnotation = result.fullTextAnnotation.text;
+    // console.log(`Full text: ${fullTextAnnotation}`);
+    fullTextAnnotation.slice(fullTextAnnotation.indexOf("Patient name")).split("\n").forEach((key) => jsonTextAnnotation[key.split(":")[0]] = key.split(":")[1]);
+    // console.log(jsonTextAnnotation);
+    return jsonTextAnnotation;
 }
 
 exports.run_gc_vision = run_gc_vision;
