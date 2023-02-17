@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const formidable = require('formidable');
-// const service = require('./services/gc_vision')
+const service = require('./services/gc_vision')
 const path = require('path');
 const uploadFolder = path.join(__dirname, "public");
 var cors = require('cors')
@@ -23,7 +23,7 @@ app.post('/api/upload', (req, res, next) => {
             next(err);
             return;
         }
-        run_gc_vision(files.upload.filepath).then(result => {
+        service.run_gc_vision(files.upload.filepath).then(result => {
             patient_json = JSON.stringify(result);
             console.log(result)
         }
@@ -42,22 +42,3 @@ app.get("/api", (req, res) => {
 app.listen(3001, () => {
     console.log('Server listening on http://localhost:3001 ...');
 });
-
-// Imports the Google Cloud client library
-const vision = require('@google-cloud/vision');
-
-// Creates a client
-const client = new vision.ImageAnnotatorClient();
-
-// const filename = 'Local image file, e.g. /path/to/image.png';
-
-// Read a local image as a text document
-async function run_gc_vision(filename) {
-    let jsonTextAnnotation={};
-    const [result] = await client.documentTextDetection(filename);
-    const fullTextAnnotation = result.fullTextAnnotation.text;
-    // console.log(`Full text: ${fullTextAnnotation}`);
-    fullTextAnnotation.slice(fullTextAnnotation.indexOf("Patient name")).split("\n").forEach((key) => jsonTextAnnotation[key.split(":")[0]] = key.split(":")[1]);
-    // console.log(jsonTextAnnotation);
-    return jsonTextAnnotation;
-}
