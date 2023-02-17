@@ -1,8 +1,7 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const formidable = require('formidable');
-const service = require('./services/gc_vision')
-const path = require('path');
+const formidable = require("formidable");
+const path = require("path");
 const uploadFolder = path.join(__dirname, "public");
 var cors = require('cors')
 app.use(cors())
